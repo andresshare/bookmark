@@ -1,0 +1,27 @@
+<!DOCTYPE html>{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{%block title%}{% endblock title%}</title>
+    <link rel="stylesheet"  type="text/css" href="{% static 'css/bootstrap.css'  %}">
+    <link rel="stylesheet"
+</head>
+<body>
+
+ <nav class="navbar navbar-light bg-light mb-3">
+     <div class="navbar-brand" href="#">bookmark</div>
+     <ul class="navbar-nav mr-auto">
+         <li class="nav-item">
+             <a href="" class="nav-link">Home</a>
+         </li>
+     </ul>
+ </nav>
+
+ {% block content %}
+ {% endblock content %}
+
+<script src="{% static 'js/jquery3.2.1.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+
+</body>
+</html>

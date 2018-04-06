@@ -1,0 +1,12 @@
+{% extends  'base.html' %}
+{% block title%} {{ user }} {% endblock %}
+
+{% block content%}
+
+        <div class="container">
+        <h3>{{user}}</h3>
+        {% for  bookmark in bookmarks%}
+            <p>{{bookmark.name}}</p>
+        {% endfor %}
+        </div>
+{% endblock %}

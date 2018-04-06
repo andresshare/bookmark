@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %} All Bookmarks {% endblock %}
+{% block content %}
+<div class="container">
+    <h2>All Bookmarks</h2>
+    <table class="table table-hover">
+
+        <thead>
+        <tr>
+            <th>Website</th>
+            <th>Tags</th>
+            <th>Posted By</th>
+            <th>Posted Since</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for bookmark in bookmarks%}
+        <tr>
+            <td><a href="//{{ bookmark.url }}" target="_blank">{{bookmark.name}}</a></td>
+            <td>
+                {% for tag in bookmark.tags.all %}
+                    {{tag.name|lower}}
+                {% empty %}
+                    No tags
+                {% endfor %}
+            </td>
+            <td><a href="{% url 'detail-route' bookmark.user %}">{{bookmark.user}}</a> </td>
+            <td>{{bookmark.datetimeposted | timesince }} ago</td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% endblock %}
