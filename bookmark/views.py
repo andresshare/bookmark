@@ -1,11 +1,13 @@
 
 from __future__ import unicode_literals
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render ,get_object_or_404
-from django.http import HttpResponse,HttpResponseNotFound,Http404
+from django.http import HttpResponse,HttpResponseNotFound,Http404, HttpResponseRedirect
 from bookmark.models import Bookmark
-
-from django.views.generic import ListView,DetailView
+from django.urls import reverse
+from django.views.generic import ListView,DetailView,CreateView
+from django.utils.decorators import method_decorator
 
 
 class AllBookmarksView(ListView):
@@ -44,3 +46,19 @@ class BookmarkByUser(DetailView):
         context = super(BookmarkByUser,self).get_context_data(**kwargs)
         context['bookmarks'] = Bookmark.objects.filter(user=self.get_object(),ispublic=True)
         return context
+
+    def createbookmarkview(CreateView):
+        model =Bookmark
+        template_name ='bookmark/create_bookmark_form.html'
+        fields =['name','url','tags','ispublic']
+
+        def form_valid(self,form):
+            bookmark = form.save(commit=False)
+            bookmark.user =self.request.user
+            bookmark.save()
+            form.save_m2m()
+            return HttpResponseRedirect(reverse('all-bookmarks'))
+
+        @method_decorator
+        def dispatch(self, request, *args, **kwargs):
+            return super(CreateBookmakView,self).dispatch(request,*args,**kwargs)

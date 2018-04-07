@@ -1,0 +1,13 @@
+{% extends  'base.html' %}
+{% block title%} Created Bookmark {% endblock %}
+
+{% block content%}
+<div class="container">
+    <div class="form" action="{% url 'create-bookmark'%}" method="post">{{csrf_token}}
+        {{form}}
+        <button type="submit">Add bookmark</button>
+
+
+    </div>
+</div>
+{% end block%}
