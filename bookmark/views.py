@@ -1,13 +1,17 @@
 
 from __future__ import unicode_literals
+
+from bookmark.forms import CreateBookmarkForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
 from django.shortcuts import render ,get_object_or_404
-from django.http import HttpResponse,HttpResponseNotFound,Http404, HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseNotFound,Http404, HttpResponseRedirect,HttpResponseForbidden
 from bookmark.models import Bookmark
 from django.urls import reverse
-from django.views.generic import ListView,DetailView,CreateView
+from django.views.generic import ListView,DetailView,CreateView,UpdateView
 from django.utils.decorators import method_decorator
+
 
 
 class AllBookmarksView(ListView):
@@ -47,18 +51,37 @@ class BookmarkByUser(DetailView):
         context['bookmarks'] = Bookmark.objects.filter(user=self.get_object(),ispublic=True)
         return context
 
-    def createbookmarkview(CreateView):
-        model =Bookmark
+class CreateBookmarkView(CreateView):
+        form_class = CreateBookmarkForm
+        #model =Bookmark
         template_name ='bookmark/create_bookmark_form.html'
-        fields =['name','url','tags','ispublic']
 
-        def form_valid(self,form):
+
+        def form_valid(self, form):
             bookmark = form.save(commit=False)
             bookmark.user =self.request.user
             bookmark.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse('all-bookmarks'))
 
-        @method_decorator
+        @method_decorator(login_required)
         def dispatch(self, request, *args, **kwargs):
-            return super(CreateBookmakView,self).dispatch(request,*args,**kwargs)
+            return super(CreateBookmarkView, self).dispatch(request,*args,**kwargs)
+
+class UpdateBookmarkView(updateView):
+    model = Bookmark
+    template_name ='bookmark/update_bookmark_form.html'
+    fields =['name','url','ispublic','tags']
+    sucess_url =reverse('all-bookmarks')
+
+
+    def get(self,request, *args,**kwargs):
+       bookmark =self.get_object()
+       if not request.user ==bookmark.user:
+           return HttpResponseForbbiden("Forbidden")
+
+       else:
+           return super(UpdateBookmarkView, self).get(request, *args,**kwargs)
+
+
+

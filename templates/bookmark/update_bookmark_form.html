@@ -1,0 +1,13 @@
+{% extends  'base.html' %}
+{% block title%} Edit {% endblock %}
+
+{%block content%}
+<div class="container">
+    <h3>Edit Bomartks</h3>
+    <form action="{% url update-bookmark bookmark.id %}" method="post">
+        {% csrf_token%}
+        {{form}}
+        <button type="submit">Edit Bookmark</button>
+    </form>
+</div>
+{% endblock %}

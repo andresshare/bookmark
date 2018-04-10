@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Tags(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
 class Bookmark(models.Model):
     name = models.CharField(max_length=50)
     url =  models.URLField()
